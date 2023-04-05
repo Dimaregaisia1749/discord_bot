@@ -1,8 +1,7 @@
 import discord
 import logging
 import asyncio
-from discord.ext import commands
-from discord.ext.commands import Bot, Context
+from discord.ext.commands import Bot
 import os
 from data import db_session
 from dotenv import load_dotenv
@@ -14,7 +13,7 @@ load_dotenv(dotenv_path="token.env")
 TOKEN = os.getenv('TOKEN')
 #proxy = "http://proxy.volgatech.net:3128/"
 
-db_session.global_init("db/blogs.db")
+db_session.global_init("db/database.db")
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.INFO)
@@ -24,7 +23,7 @@ handler.setFormatter(logging.Formatter(
 logger.addHandler(handler)
 
             
-class BotClient(commands.Bot):
+class BotClient(Bot):
     def __init__(self):
         super().__init__(command_prefix='/', intents=discord.Intents.all(),
                          application_id=1087358256416051325)
@@ -44,7 +43,6 @@ class BotClient(commands.Bot):
             if i[-3:] == '.py':
                 await self.load_extension(f"cogs.{i[:-3]}")
         await self.tree.sync(guild=discord.Object(id=806157869040140288))
-
 
 #client = BotClient(intents=intents, proxy=proxy)
 bot = BotClient()
