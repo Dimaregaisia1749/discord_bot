@@ -44,7 +44,7 @@ class BotClient(Bot):
                 await self.load_extension(f"cogs.{i[:-3]}")
         await self.tree.sync(guild=discord.Object(id=806157869040140288))
 
-#client = BotClient(intents=intents, proxy=proxy)
+#client = BotClient(proxy=proxy)
 bot = BotClient()
 bot.run(TOKEN)
 

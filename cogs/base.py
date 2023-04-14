@@ -1,9 +1,6 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-from discord.ui.view import View
-from discord.app_commands import Choice
-import random
 from data.users import User
 from data import db_session
 
@@ -25,6 +22,11 @@ class BaseCommands(commands.Cog):
             user.expirience = 0
             user.coins = 0
             user.tesseracts = 0
+            user.max_hp = 100
+            user.crit_chance = 1
+            user.crit_damage = 150
+            user.armor = 0
+            user.base_damage = 10
             user.rank = "None"
             db_sess.add(user)
             db_sess.commit()
@@ -91,16 +93,6 @@ class BaseCommands(commands.Cog):
             embed.add_field(name=f"{number}: {users[i].name} : {users[i].expirience} опыта", value="", inline=False)
         await ctx.response.send_message(embed=embed)
 
-    @app_commands.command(name='exp_plus', description='Добавить опыт')
-    @app_commands.describe(exp="Експа")
-    async def exp_plus(self, ctx: discord.Interaction, exp: int):
-        db_sess = db_session.create_session()
-        user = db_sess.query(User).filter(User.user_id == ctx.user.id).first()
-        user.expirience += exp
-        db_sess.commit()
-        if user:
-            await ctx.response.send_message(content=f"Добавлено {exp} опыта")
-
     @app_commands.command(name='del_acc', description='БЕЗВОЗРАТНОЕ УДАЛЕНИЕ АККАУНТА❌❌❌')
     async def del_acc(self, ctx: discord.Interaction):
         db_sess = db_session.create_session()
@@ -133,13 +125,18 @@ class BaseCommands(commands.Cog):
                                   color=discord.Colour.blurple())
             exp = f"⭐Опыт: {await exp_write(user.expirience)}"
             lvl = f"📍Уровень: {await lvl_write(user.expirience)}"
+            dmg = f"💪Базовый урон: {user.base_damage}"
+            crit = f"💢Шанс крита: {user.crit_chance}"
+            crit_chance = f"💥Крит урон: {user.crit_damage}"
             coins = f"📀Монеты: {user.coins}"
             tesseracts = f"🔳Тессеракты: {user.tesseracts}"
-            first_list = [exp, lvl]
-            second_list = [" ", coins, tesseracts]
+            max_hp = f"💗Макс хп: {user.max_hp}"
+            armor = f"🔰Броня: {user.armor}"
+            first_list = [exp, lvl, dmg, crit, crit_chance]
+            second_list = [coins, tesseracts, max_hp, armor]
             embed.add_field(name="Статы📊", value='\n'.join(
                 first_list), inline=True)
-            embed.add_field(name="", value='\n'.join(
+            embed.add_field(name="\u200b", value='\n'.join(
                 second_list), inline=True)
             embed.set_thumbnail(url=user.avatar_link)
             await ctx.response.send_message(embed=embed)
@@ -148,7 +145,7 @@ class BaseCommands(commands.Cog):
 
 
 async def lvl_write(exp):
-    exp_list = [i * 50 + 100 for i in range(100)]
+    exp_list = [i * 75 + 50 for i in range(100)]
     for i in range(len(exp_list)):
         if exp < exp_list[i]:
             return i
@@ -156,7 +153,7 @@ async def lvl_write(exp):
 
 
 async def exp_write(exp):
-    exp_list = [i * 50 + 100 for i in range(100)]
+    exp_list = [i * 75 + 50 for i in range(100)]
     for i in range(len(exp_list)):
         if exp < exp_list[i]:
             return f"{exp}/{exp_list[i]}"
