@@ -41,7 +41,7 @@ class Staff(commands.Cog):
         gif = self.gifs[random.randint(0, len(self.gifs) - 1)]
         await ctx.response.send_message(gif)
         
-    @app_commands.command(name='randgif', description='Рандомный кот')
+    @app_commands.command(name='randcat', description='Рандомный кот')
     async def randcat(self, ctx: discord.Interaction):
         cat = requests.get("https://api.thecatapi.com/v1/images/search")[0]["url"]
         await ctx.response.send_message(cat)
