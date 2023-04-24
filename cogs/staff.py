@@ -46,6 +46,11 @@ class Staff(commands.Cog):
     async def randgif(self, ctx: discord.Interaction):
         gif = self.gifs[random.randint(0, len(self.gifs) - 1)]
         await ctx.response.send_message(gif)
+        
+    @app_commands.command(name='randcat', description='Рандомный кот')
+    async def randcat(self, ctx: discord.Interaction):
+        cat = requests.get("https://api.thecatapi.com/v1/images/search")[0]["url"]
+        await ctx.response.send_message(cat)
     
     @app_commands.command(name='delete_messages', description='Удалить последние сообщения')
     @app_commands.describe(x="Количество сообщений(максимум 10)")

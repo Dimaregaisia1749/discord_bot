@@ -1,4 +1,0 @@
-sqlalchemy
-discord.py
-requests
-python-dotenv
