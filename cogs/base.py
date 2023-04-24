@@ -50,19 +50,23 @@ class BaseCommands(commands.Cog):
     async def help(self, ctx: discord.Interaction):
         base = discord.Embed(title="Базовые комады",
                              color=discord.Colour.random())
-        base_commands = {"/start": "Создать профиль",
+        base_commands = {"/help": "Вывести справку",
+                         "/start": "Создать профиль",
                          "/change_avatar": "Изменить аватар профиля",
                          "/change_name": "Изменить имя профиля",
                          "/del_acc": "Удалить профиль",
-                         "/info": "Вывести сведения о профиле",
-                         "/start": "Создать профиль"}
+                         "/info": "Вывести сведения о профиле"}
         combat = discord.Embed(title="Команды сражений",
                                color=discord.Colour.random())
-        combat_commands = {"/start": "Создать профиль",
-                           "/change_avatar": "Измнить аватар профиля",
-                           "/del_acc": "Удалить профиль",
-                           "/info": "Вывести сведения о профиле",
-                           "/start": "Создать профиль"}
+        combat_commands = {"/areas": "Вывести все локации",
+                           "/fight": "Сразиться в локации"}
+        economy = discord.Embed(title="Команды экономики",
+                                color=discord.Colour.random())
+        economy_commands = {"/start": "Создать профиль",
+                            "/change_avatar": "Измнить аватар профиля",
+                            "/del_acc": "Удалить профиль",
+                            "/info": "Вывести сведения о профиле",
+                            "/start": "Создать профиль"}
         economy = discord.Embed(title="Команды экономики",
                                 color=discord.Colour.random())
         economy_commands = {"/start": "Создать профиль",
@@ -126,8 +130,8 @@ class BaseCommands(commands.Cog):
             exp = f"⭐Опыт: {await exp_write(user.expirience)}"
             lvl = f"📍Уровень: {await lvl_write(user.expirience)}"
             dmg = f"💪Базовый урон: {user.base_damage}"
-            crit = f"💢Шанс крита: {user.crit_chance}"
-            crit_chance = f"💥Крит урон: {user.crit_damage}"
+            crit = f"💢Шанс крита: {user.crit_chance}%"
+            crit_chance = f"💥Крит урон: {user.crit_damage}%"
             coins = f"📀Монеты: {user.coins}"
             tesseracts = f"🔳Тессеракты: {user.tesseracts}"
             max_hp = f"💗Макс хп: {user.max_hp}"

@@ -36,7 +36,7 @@ class BotClient(Bot):
             if message.author.name in ("70 JlETHNN TTЕHCNOHEP", "dimaregaisia"):
                 await message.add_reaction("💀")
             if message.author.name == "DоctorMaki":
-                await message.add_reaction("🍺")                
+                await message.add_reaction("🍺")                 
     
     async def setup_hook(self) -> None:
         for i in os.listdir('cogs'):

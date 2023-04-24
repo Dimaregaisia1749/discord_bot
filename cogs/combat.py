@@ -37,9 +37,9 @@ class CombatCommands(commands.Cog):
             lines = {"🔒Необходимый уровень:": i.lvl,
                      "⭐Награды опыта:": i.reward_exp,
                      "📀Награды монет:": i.reward_coins,
-                     "💪Атака противника:": i.attack,
+                     "💪Атака противника:": i.damage,
                      "🔰Броня противника:": i.armor,
-                     "💗Хп противника:": i.hp,
+                     "💗Хп противника:": i.max_hp,
                      "🚫Наказание в монетах за проигрыш:": i.punishment,
                      "⚫Команда:": i.command}
             for i in lines:
@@ -87,16 +87,13 @@ class CombatCommands(commands.Cog):
                 while (user.max_hp - damage_to_user) >= 0 and (location.max_hp - damage_to_enemy) > 0:
                     await sleep(2)
                     if randint(0, 100) <= user.crit_chance:
-                        damage = int(user.base_damage * user.crit_damage / 100)
-                        damage_to_enemy += damage
-                        damage_log[0] = f"{user.name} нанес критический урон({damage})"
+                        damage = int(user.base_damage * user.crit_damage / 100) - location.armor
                     else:
                         damage = user.base_damage
-                        damage_to_enemy += damage
-                        damage_log[0] = f"{user.name} нанес урон({damage})"
-                    damage = location.damage
+                    damage_log[0] = f"🔵{user.name} нанес урон({damage})"
+                    damage = location.damage - user.armor
                     damage_to_user += damage
-                    damage_log[1] = f"Противник нанес урон({damage})"
+                    damage_log[1] = f"🔴Противник нанес урон({damage})"
                     await ctx.channel.send('\n'.join(damage_log))
                     embed = discord.Embed(title=f"{user.name} in {location_name}",
                                           color=discord.Colour.red())
@@ -128,6 +125,8 @@ class CombatCommands(commands.Cog):
                     await ctx.channel.send(f"{user.name} проиграл и потерял {location.punishment}📀")
                     await ctx.channel.send("https://media.discordapp.net/attachments/806157869040140290/1096470852398239835/ezgif-3-2a0fc07043.gif")
                     user.expirience -= location.punishment
+                user.base_damage = 10 + await lvl_write(user.expirience) * 2
+                user.max_hp = 100 + await lvl_write(user.expirience) * 20
                 db_sess.commit()
             else:
                 await ctx.response.send_message(content="Такой локации не существует, вызовите areas чтобы просмотреть все локации")

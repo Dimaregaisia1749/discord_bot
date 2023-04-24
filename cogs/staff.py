@@ -3,6 +3,7 @@ from discord.ext import commands
 from discord import app_commands
 from discord.app_commands import Choice
 import random
+import requests
 
 
 class Staff(commands.Cog):
@@ -34,6 +35,12 @@ class Staff(commands.Cog):
         else:
             num = random.randint(int(min_int), int(max_int))
             await ctx.response.send_message(num)
+    
+    @app_commands.command(name='randcat', description='Рандомная картинка кота')
+    async def randcat(self, ctx: discord.Interaction):
+        request = "https://api.thecatapi.com/v1/images/search"
+        response = requests.get(request).json()[0]
+        await ctx.response.send_message(response["url"])
         
     @app_commands.command(name='randgif', description='Рандомная гифка')
     async def randgif(self, ctx: discord.Interaction):
@@ -48,12 +55,6 @@ class Staff(commands.Cog):
         else:
             await ctx.response.send_message(f"Удалено {x} сообщений")
             await ctx.channel.purge(limit=x + 1)
-
-    @app_commands.command(name='embed')
-    async def embed(self, ctx: discord.Interaction, title: str, field: str):
-        embed = discord.Embed(title=title, description=field,color=discord.Colour.random())
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/777609425534976020/1088825888205967440/20220819_103235.gif")
-        await ctx.response.send_message(embed=embed)
 
 
 
