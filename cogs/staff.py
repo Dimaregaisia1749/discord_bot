@@ -35,12 +35,6 @@ class Staff(commands.Cog):
         else:
             num = random.randint(int(min_int), int(max_int))
             await ctx.response.send_message(num)
-    
-    @app_commands.command(name='randcat', description='Рандомная картинка кота')
-    async def randcat(self, ctx: discord.Interaction):
-        request = "https://api.thecatapi.com/v1/images/search"
-        response = requests.get(request).json()[0]
-        await ctx.response.send_message(response["url"])
         
     @app_commands.command(name='randgif', description='Рандомная гифка')
     async def randgif(self, ctx: discord.Interaction):
